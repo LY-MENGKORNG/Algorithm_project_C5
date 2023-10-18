@@ -63,5 +63,6 @@ while x <= APP_WIDTH:
     canvas.create_image(x, y, image=wall, anchor=NW, tags="wall")
     x += wall.width()
 
+
 window.resizable(False, False)
 window.mainloop()
