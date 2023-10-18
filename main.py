@@ -9,6 +9,8 @@ window.iconphoto(False, icon)
 # constance 
 APP_WIDTH = 1280
 APP_HEIGHT = 650
+BG_FRAME = "gray"
+BG_CANVAS = "lightseagreen"
 
 # App center
 screen_width = window.winfo_screenwidth()
@@ -18,11 +20,11 @@ y = int((screen_height / 2) - (APP_HEIGHT / 2))
 window.geometry(f'{APP_WIDTH}x{APP_HEIGHT}+{x}+{y}')
 
 # Frame
-frame = Frame(window, width=APP_WIDTH, height=APP_HEIGHT)
+frame = Frame(window, width=APP_WIDTH, height=APP_HEIGHT, bg=BG_FRAME)
 frame.pack()
 
 # Canvas
-canvas = Canvas(frame,width=APP_WIDTH, height=APP_HEIGHT, bg="lightseagreen")
+canvas = Canvas(frame,width=APP_WIDTH, height=APP_HEIGHT, bg=BG_CANVAS)
 canvas.pack()
 
 # Clouds
@@ -41,6 +43,14 @@ walk = PhotoImage(file='frog_walk.png')
 walk2 = PhotoImage(file='frog_walk2.png')
 jump = PhotoImage(file='frog_jump.png')
 jump2 = PhotoImage(file='frog_jump2.png')
+
+# Walls
+wall = PhotoImage(file='wall.png')
+x, y = 0, APP_HEIGHT - wall.height()
+while x <= APP_WIDTH:
+    canvas.create_image(x, y, image=wall, anchor=NW, tags="wall")
+    x += wall.width()
+
 # Player
 player = canvas.create_image(200, 200, image=stop, anchor=NW)
 
@@ -56,12 +66,6 @@ canvas.create_image(500, 500, image=flies, anchor=NW, tags="feed")
 canvas.create_image(900, 300, image=flies, anchor=NW, tags="feed")
 canvas.create_image(300, 300, image=flies, anchor=NW, tags="feed")
 
-# Walls
-wall = PhotoImage(file='wall.png')
-x, y = 0, APP_HEIGHT - wall.height()
-while x <= APP_WIDTH:
-    canvas.create_image(x, y, image=wall, anchor=NW, tags="wall")
-    x += wall.width()
 
 
 window.resizable(False, False)
