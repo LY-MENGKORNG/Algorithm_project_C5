@@ -44,6 +44,16 @@ walk2 = PhotoImage(file='frog_walk2.png')
 jump = PhotoImage(file='frog_jump.png')
 jump2 = PhotoImage(file='frog_jump2.png')
 
+# Feeds
+flies = PhotoImage(file='flies.png')
+canvas.create_image(200, 50, image=flies, anchor=NW, tags="feed")
+canvas.create_image(100, 150, image=flies, anchor=NW, tags="feed")
+canvas.create_image(500, 250, image=flies, anchor=NW, tags="feed")
+canvas.create_image(700, 50, image=flies, anchor=NW, tags="feed")
+canvas.create_image(500, 500, image=flies, anchor=NW, tags="feed")
+canvas.create_image(900, 300, image=flies, anchor=NW, tags="feed")
+canvas.create_image(300, 300, image=flies, anchor=NW, tags="feed")
+
 # Walls
 wall = PhotoImage(file='wall.png')
 x, y = 0, APP_HEIGHT - wall.height()
@@ -56,15 +66,6 @@ player = canvas.create_image(200, 200, image=stop, anchor=NW)
 
 # Enemy
 
-# Feeds
-flies = PhotoImage(file='flies.png')
-canvas.create_image(200, 50, image=flies, anchor=NW, tags="feed")
-canvas.create_image(100, 150, image=flies, anchor=NW, tags="feed")
-canvas.create_image(500, 250, image=flies, anchor=NW, tags="feed")
-canvas.create_image(700, 50, image=flies, anchor=NW, tags="feed")
-canvas.create_image(500, 500, image=flies, anchor=NW, tags="feed")
-canvas.create_image(900, 300, image=flies, anchor=NW, tags="feed")
-canvas.create_image(300, 300, image=flies, anchor=NW, tags="feed")
 
 
 window.resizable(False, False)
