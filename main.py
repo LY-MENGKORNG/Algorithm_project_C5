@@ -66,6 +66,26 @@ canvas.create_image(500, 500, image=flies, anchor=NW, tags="feed")
 canvas.create_image(900, 300, image=flies, anchor=NW, tags="feed")
 canvas.create_image(300, 300, image=flies, anchor=NW, tags="feed")
 
+#check_move 
+
+# def move_left(event):
+#     if canvas.coords(player)[0] > 0:
+#         canvas.move(player,-10,0)
+# def move_right(event):
+#     if canvas.coords(player)[0] < APP_WIDTH-70:
+#         canvas.move(player, 10,0)
+# def move_up(event):
+#     if canvas.coords(player)[1] > 0:
+#         canvas.move(player,0,-10)
+# def move_down(event):
+#     if canvas.coords(player)[1] < APP_HEIGHT-100:
+#         canvas.move(player, 0,10)
+
+# window.bind("<Left>",move_left)
+# window.bind("<Right>",move_right)
+# window.bind("<Up>",move_up)
+# window.bind("<Down>",move_down)
+
 
 
 window.resizable(False, False)
