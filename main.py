@@ -217,4 +217,3 @@ window.bind("<KeyRelease>", stop_move)
 window.resizable(False, False)
 window.mainloop()
 
-# hello world
