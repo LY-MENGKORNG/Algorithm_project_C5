@@ -106,6 +106,7 @@ def game_start():
     pass
 
 def gravity():
+    if check_overlaping()
     canvas.move(player, 0, GRAVITY_FORCE)
     window.after(TIMED_LOOP, gravity)
 gravity()
@@ -116,8 +117,20 @@ def move_player():
 def check_direction():
     pass
 
-def check_overlaping():
-    pass
+def check_overlaping(x_direction=0, y_direction=0, ground=False):
+    coord = canvas.coords(player)
+    platforms = canvas.find_withtag("wall")
+    if coord[0] + direction_x < 0 or coord[0] + direction_x > APP_WIDTH:
+        return False
+
+    if checkGround:
+        overlap = canvas.find_overlapping(coord[0], coord[1], coord[0]+ stop.width(), coord[1] + stop.height())
+    else:
+        overlap = canvas.find_overlapping(coord[0]+direction_x, coord[1]+direction_y, coord[0]+direction_x, coord[1])
+    for platform in platforms:
+        if platform in overlap:
+            return False
+    return True
 
 def change_direction():
     pass
