@@ -105,18 +105,6 @@ enemy = canvas.create_image(APP_WIDTH - 300, 100, image=bee_left, anchor=NW, tag
 def game_start():
     pass
 
-def gravity():
-    if check_overlaping()
-    canvas.move(player, 0, GRAVITY_FORCE)
-    window.after(TIMED_LOOP, gravity)
-gravity()
-
-def move_player():
-    pass
-
-def check_direction():
-    pass
-
 def check_overlaping(x_direction=0, y_direction=0, ground=False):
     coord = canvas.coords(player)
     platforms = canvas.find_withtag("wall")
@@ -126,11 +114,24 @@ def check_overlaping(x_direction=0, y_direction=0, ground=False):
     if checkGround:
         overlap = canvas.find_overlapping(coord[0], coord[1], coord[0]+ stop.width(), coord[1] + stop.height())
     else:
-        overlap = canvas.find_overlapping(coord[0]+direction_x, coord[1]+direction_y, coord[0]+direction_x, coord[1])
+        overlap = canvas.find_overlapping(coord[0]+x_direction, coord[1]+y_direction, coord[0]+x_direction, coord[1]+y_direction)
     for platform in platforms:
         if platform in overlap:
             return False
     return True
+    
+def gravity():
+    if check_overlaping(0, GRAVITY_FORCE, True):
+        canvas.move(player, 0, GRAVITY_FORCE)
+        window.after(TIMED_LOOP, gravity)
+gravity()
+
+def move_player():
+    pass
+
+def check_direction():
+    pass
+
 
 def change_direction():
     pass
