@@ -91,7 +91,7 @@ while x <= APP_WIDTH:
         x += obstacles.width()
     else:
         canvas.create_image(x, y, image=wall, anchor=NW, tags="wall")
-        x += wall.width()
+    x += wall.width()
 
 # Player
 player = canvas.create_image(100, 100, image=stop, anchor=NW)
@@ -102,9 +102,6 @@ bee_right = PhotoImage(file='bee_right.png')
 enemy = canvas.create_image(APP_WIDTH - 300, 100, image=bee_left, anchor=NW, tags="enemy")
 
 # FUNCTION----------
-def game_start():
-    pass
-
 def check_overlaping(x_direction=0, y_direction=0, ground=False):
     coord = canvas.coords(player)
     platforms = canvas.find_withtag("wall")
