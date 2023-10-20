@@ -17,6 +17,7 @@ GRAVITY_FORCE = 9
 KEY_PRESSED = []
 SPEED = 7
 
+
 # App center
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight() - 70
@@ -116,37 +117,31 @@ def check_movement(direction_x=0, direction_y=0, checkGround=False):
 def player_jum(force, remember):
     if force > 0:
         if check_movement(0, -force):
-            if remember == "Left":
-                canvas.itemconfig(player, image=jum_left)
-            elif remember == "Right":
-                canvas.itemconfig(player, image=jump)
             canvas.move(player, 0, -force)
             window.after(5, player_jum, force-1)
-    else:
-        canvas.itemconfig(player, image=jump2)
 
 def move():
-    if KEY_PRESSED != []:
         x = 0
-        if KEY_PRESSED[0] != "space":
-            remember = KEY_PRESSED[0]
         if "Left" in KEY_PRESSED:
-            x -= SPEED
+            x = -SPEED
             canvas.itemconfig(player, image=stop2)
         elif "Right" in KEY_PRESSED:
-            x += SPEED
+            x = SPEED
             canvas.itemconfig(player, image=stop)
-        if "space" in KEY_PRESSED and not check_movement(0, GRAVITY_FORCE, True):
-            player_jum(30, remember)
         if check_movement(x):
             canvas.move(player, x, 0)
             window.after(10, move)
 
 def start_move(event):
+    remember = "Right"
     if event.keysym not in KEY_PRESSED:
         KEY_PRESSED.append(event.keysym)
         if len(KEY_PRESSED) == 1:
-            move()
+            if KEY_PRESSED[0] == "Left" or KEY_PRESSED[0] == "Right":
+                move()
+                remember = KEY_PRESSED[0]
+            elif KEY_PRESSED[0] == "space":
+                player_jum(20, remember)
 
 def stop_move(event):
     global KEY_PRESSED
