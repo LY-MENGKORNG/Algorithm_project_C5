@@ -108,10 +108,10 @@ def game_start():
 def check_overlaping(x_direction=0, y_direction=0, ground=False):
     coord = canvas.coords(player)
     platforms = canvas.find_withtag("wall")
-    if coord[0] + direction_x < 0 or coord[0] + direction_x > APP_WIDTH:
+    if coord[0] + x_direction < 0 or coord[0] + x_direction > APP_WIDTH:
         return False
 
-    if checkGround:
+    if ground:
         overlap = canvas.find_overlapping(coord[0], coord[1], coord[0]+ stop.width(), coord[1] + stop.height())
     else:
         overlap = canvas.find_overlapping(coord[0]+x_direction, coord[1]+y_direction, coord[0]+x_direction, coord[1]+y_direction)
