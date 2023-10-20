@@ -113,13 +113,13 @@ def check_movement(direction_x=0, direction_y=0, checkGround=False):
             return False
     return True
 
-def player_jum(force):
+def player_jum(force, remember):
     if force > 0:
         if check_movement(0, -force):
-            # if remember == "Left":
-            #     canvas.itemconfig(player, image=jum_left)
-            # elif remember == "Right":
-            #     canvas.itemconfig(player, image=jump)
+            if remember == "Left":
+                canvas.itemconfig(player, image=jum_left)
+            elif remember == "Right":
+                canvas.itemconfig(player, image=jump)
             canvas.move(player, 0, -force)
             window.after(5, player_jum, force-1)
     else:
@@ -137,7 +137,7 @@ def move():
             x += SPEED
             canvas.itemconfig(player, image=stop)
         if "space" in KEY_PRESSED and not check_movement(0, GRAVITY_FORCE, True):
-            player_jum(30)
+            player_jum(30, remember)
         if check_movement(x):
             canvas.move(player, x, 0)
             window.after(10, move)
@@ -152,7 +152,6 @@ def stop_move(event):
     global KEY_PRESSED
     if event.keysym in KEY_PRESSED:
         KEY_PRESSED.remove(event.keysym)
-
 
 # Check position of enemy
 def check_enemymove(enemy):
@@ -217,3 +216,5 @@ window.bind("<KeyRelease>", stop_move)
 
 window.resizable(False, False)
 window.mainloop()
+
+# hello world
