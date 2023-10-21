@@ -11,12 +11,12 @@ window.iconphoto(False, icon)
 # constance 
 APP_WIDTH = window.winfo_screenwidth()
 APP_HEIGHT = window.winfo_screenheight() - 70
-X_VELOCITY, Y_VELOCITY = 6, 4
+X_VELOCITY, Y_VELOCITY = 7, 5
 RUNNING = True
 GRAVITY_FORCE = 9
 JUMP_FORCE = 25
 KEY_PRESSED = []
-TIMED_LOOP = 30
+TIMED_LOOP = 20
 SPEED = 7
 RUNNING = True
 
@@ -138,6 +138,21 @@ def enemy_move():
     canvas.move(enemy, X_VELOCITY, Y_VELOCITY)
     window.after(TIMED_LOOP, enemy_move)
 enemy_move()
+
+# Feeds move
+def feed_move():
+    x, y = 0, 10
+    feed1_coord = canvas.coords("feed1")
+    feed2_coord = canvas.coords("feed2")
+    if feed1_coord[1] <= 0 or feed2_coord[1] >= 0:
+        y = -y
+    elif feed1_coord[1] >= APP_HEIGHT - 50 or feed2_coord[1] >= APP_HEIGHT - 50:
+        y = -y
+    canvas.move("feed1", x, y)
+    canvas.move("feed2", x, -y)
+    window.after(TIMED_LOOP, feed_move)
+        
+feed_move()
 
 def move_player(x, y):
     pass
