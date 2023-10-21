@@ -18,6 +18,7 @@ JUMP_FORCE = 25
 KEY_PRESSED = []
 TIMED_LOOP = 30
 SPEED = 7
+RUNNING = True
 
 
 # App center
@@ -28,13 +29,6 @@ y = int((screen_height / 2) - (APP_HEIGHT / 2))
 window.geometry(f'{APP_WIDTH}x{APP_HEIGHT}+{x}+{y}')
 
 # Frame
-# canvas_bg = PhotoImage(file='background.png')
-# splash_frame = Frame(window, width=APP_WIDTH, height=APP_HEIGHT)
-# splash_frame.pack()
-# splash_canvas = Canvas(frame, width=APP_WIDTH, height=APP_HEIGHT)
-# splash_canvas.pack()
-# splash_canvas.create_image(0, 0, image=canvas_bg, anchor=NW)
-
 frame = Frame(window, width=APP_WIDTH, height=APP_HEIGHT)
 frame.pack()
 
@@ -86,11 +80,16 @@ wall2 = PhotoImage(file='wall2.png')
 obstacles = PhotoImage(file='obstacles.png')
 x, y = 0, APP_HEIGHT - wall.height()
 while x <= APP_WIDTH:
-    if (x >= int(APP_WIDTH / 4) and x <= int(APP_WIDTH / 3)) or (x >= int(APP_WIDTH - 300) and x <= int(APP_WIDTH - 150)):
+    if (x >= int(APP_WIDTH / 4) and x <= int(APP_WIDTH / 3)) or (x >= int(APP_WIDTH - 200) and x <= int(APP_WIDTH - 150)):
         canvas.create_image(x, y, image=obstacles, anchor=NW, tags= "kill")
         x += obstacles.width()
     else:
         canvas.create_image(x, y, image=wall, anchor=NW, tags="wall")
+    x += wall.width()
+canvas.create_image(250, 400, image=obstacles, anchor=NW, tags="kill")
+x = 1200
+while x < APP_WIDTH :
+    canvas.create_image(x, 100, image=wall, tags="wall", anchor=NW)
     x += wall.width()
 
 # Player
@@ -100,14 +99,18 @@ player = canvas.create_image(100, 100, image=stop, anchor=NW)
 bee_left = PhotoImage(file='bee_left.png')
 bee_right = PhotoImage(file='bee_right.png')
 enemy = canvas.create_image(APP_WIDTH - 300, 100, image=bee_left, anchor=NW, tags="enemy")
+enemy_width = bee_right.width()
+enemy_height = bee_right.height()
 
-# FUNCTION----------
+
+# FUNCTION---------------------
+
+# check if player and enemy overlap
 def check_overlaping(x_direction=0, y_direction=0, ground=False):
     coord = canvas.coords(player)
     platforms = canvas.find_withtag("wall")
     if coord[0] + x_direction < 0 or coord[0] + x_direction > APP_WIDTH:
         return False
-
     if ground:
         overlap = canvas.find_overlapping(coord[0], coord[1], coord[0]+ stop.width(), coord[1] + stop.height())
     else:
@@ -116,23 +119,31 @@ def check_overlaping(x_direction=0, y_direction=0, ground=False):
         if platform in overlap:
             return False
     return True
-    
+
+# underground's gravity on player
 def gravity():
     if check_overlaping(0, GRAVITY_FORCE, True):
         canvas.move(player, 0, GRAVITY_FORCE)
         window.after(TIMED_LOOP, gravity)
 gravity()
 
-def move_player():
+# movement of enemy
+def enemy_move():
+    global X_VELOCITY, Y_VELOCITY
+    enemy_coord = canvas.coords(enemy)
+    if (enemy_coord[0] <= 30) or (enemy_coord[0] + enemy_width >= APP_WIDTH - 30):
+        X_VELOCITY = -X_VELOCITY
+    elif (enemy_coord[1] <= 30) or (enemy_coord[1] + enemy_height >= APP_HEIGHT - 30):
+        Y_VELOCITY = -Y_VELOCITY
+    canvas.move(enemy, X_VELOCITY, Y_VELOCITY)
+    window.after(TIMED_LOOP, enemy_move)
+enemy_move()
+
+def move_player(x, y):
     pass
 
-def check_direction():
+def check_direction(direction):
     pass
-
-
-def change_direction():
-    pass
-
 def player_jump():
     pass
 
@@ -148,6 +159,21 @@ def check_winner():
 def new_game():
     pass
 
+def start_move(event):
+    if event.keysym not in KEY_PRESSED:
+        KEY_PRESSED.append(event.keysym)
+        if len(KEY_PRESSED) == 1:
+            check_direction(event.keysym)
+        
+def stop_move(event):
+    global KEY_PRESSED
+    print(event.keysym)
+    if event.keysym in KEY_PRESSED:
+        KEY_PRESSED.remove(event.keysym)
+
+
+window.bind("<Key>", start_move)
+window.bind("<KeyRelease>", stop_move)
 
 window.resizable(False, False)
 window.mainloop()
