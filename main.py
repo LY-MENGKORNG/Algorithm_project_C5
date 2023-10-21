@@ -119,7 +119,7 @@ enemy_width = bee_right.width()
 enemy_height = bee_right.height()
 
 
-# FUNCTION---------------------
+# FUNCTION-----------------------------------------------------
 
 # check if player and enemy overlap
 def check_overlaping(x_direction=0, y_direction=0, ground=False):
@@ -158,10 +158,10 @@ enemy_move()
 def player_jump(force, remember):
     if force > 0:
         if check_overlaping(0, -force):
-            if remember == "Left":
-                canvas.itemconfig(player, image=jum_left)
-            elif remember == "Right":
-                canvas.itemconfig(player, image=jump)
+            # if remember == "Left":
+            #     canvas.itemconfig(player, image=jum_left)
+            # elif remember == "Right":
+            #     canvas.itemconfig(player, image=jump)
             canvas.move(player, 0, -force)
             window.after(5, player_jum, force-1, remember)
     else:
