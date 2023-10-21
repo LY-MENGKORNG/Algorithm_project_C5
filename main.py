@@ -16,7 +16,7 @@ RUNNING = True
 GRAVITY_FORCE = 9
 JUMP_FORCE = 25
 KEY_PRESSED = []
-TIMED_LOOP = 20
+TIMED_LOOP = 15
 SPEED = 7
 RUNNING = True
 
@@ -33,22 +33,16 @@ frame = Frame(window, width=APP_WIDTH, height=APP_HEIGHT)
 frame.pack()
 
 # Canvas
-canvas = Canvas(frame,width=APP_WIDTH, height=APP_HEIGHT, bg="lightseagreen")
+canvas = Canvas(frame,width=APP_WIDTH, height=APP_HEIGHT)
 canvas.pack()
 
 # Background image
 bg_img = PhotoImage(file='background.png')
-# canvas.create_image(0,0, image=bg_img, anchor=NW)
+canvas.create_image(0,0, image=bg_img, anchor=NW)
 
-# Clouds
-cloud_img = PhotoImage(file='clound.png')
-canvas.create_image(10, 100, image=cloud_img, anchor=NW,  tags="cloud")
-canvas.create_image(300, 200, image=cloud_img, anchor=NW, tags="cloud")
-canvas.create_image(800, 250, image=cloud_img, anchor=NW, tags="cloud")
-
-# Sun 
-sun_img = PhotoImage(file='sun.png')
-canvas.create_image(10, 10, image=sun_img, anchor=NW, tags="sun")
+# Player score
+score = 0
+player_score = canvas.create_text(100, 50, text="Score: {}".format(score),font=('consolas 25 bold'), fill="black")
 
 # Character
 stop = PhotoImage(file='frog_stop.png')
@@ -74,22 +68,40 @@ canvas.create_image(1100, 500, image=flies, anchor=NW, tags="feed2")
 canvas.create_image(900, 300, image=flies, anchor=NW, tags="feed1")
 canvas.create_image(1200, 700, image=flies, anchor=NW, tags="feed2")
 
-# Walls and Obstacles
+# Walls,Obstacles and recall
 wall = PhotoImage(file='wall.png')
 wall2 = PhotoImage(file='wall2.png')
 obstacles = PhotoImage(file='obstacles.png')
+recall = PhotoImage(file='recall.png')
 x, y = 0, APP_HEIGHT - wall.height()
 while x <= APP_WIDTH:
     if (x >= int(APP_WIDTH / 4) and x <= int(APP_WIDTH / 3)) or (x >= int(APP_WIDTH - 200) and x <= int(APP_WIDTH - 150)):
         canvas.create_image(x, y, image=obstacles, anchor=NW, tags= "kill")
         x += obstacles.width()
     else:
-        canvas.create_image(x, y, image=wall, anchor=NW, tags="wall")
+        canvas.create_image(x, y, image=wall2, anchor=NW, tags="wall")
     x += wall.width()
 canvas.create_image(250, 400, image=obstacles, anchor=NW, tags="kill")
-x = 1200
+
+x = 100
 while x < APP_WIDTH :
-    canvas.create_image(x, 100, image=wall, tags="wall", anchor=NW)
+    if x < 200:
+        canvas.create_image(x, 500, image=wall, tags="wall", anchor=NW)
+    if x > 200 and x < 400:
+        canvas.create_image(x, 400, image=wall, tags="wall", anchor=NW)
+        canvas.create_image(x+400, 400, image=wall, tags="wall", anchor=NW)
+    if x > 400 and x < 450:
+        canvas.create_image(x, 300, image=obstacles, tags="wall", anchor=NW)
+        canvas.create_image(x + 400, 400, image=obstacles, tags="wall", anchor=NW)
+    if x > 550 and x < 600:
+        canvas.create_image(x, 600, image=obstacles, tags="wall", anchor=NW)
+        canvas.create_image(x + 500, 350, image=wall, tags="wall", anchor=NW)
+    if x > 800 and x < 950:
+        canvas.create_image(x, 200, image=wall, tags="wall", anchor=NW)
+    if x > 1150 and x < 1200:
+        canvas.create_image(x, 100, image=wall, tags="wall", anchor=NW)
+        canvas.create_image(x, 300, image=obstacles, tags="wall", anchor=NW)
+        canvas.create_image(x - 30, 30, image=recall, tags="recall", anchor=NW)
     x += wall.width()
 
 # Player
@@ -140,30 +152,48 @@ def enemy_move():
 enemy_move()
 
 # Feeds move
-def feed_move():
-    x, y = 0, 10
+x, y = 0, 10
+while RUNNING:
     feed1_coord = canvas.coords("feed1")
     feed2_coord = canvas.coords("feed2")
-    if feed1_coord[1] <= 0 or feed2_coord[1] >= 0:
+    if feed1_coord[1] <= 0:
         y = -y
-    elif feed1_coord[1] >= APP_HEIGHT - 50 or feed2_coord[1] >= APP_HEIGHT - 50:
+    elif feed1_coord[1] + flies.height() >= APP_HEIGHT:
         y = -y
     canvas.move("feed1", x, y)
     canvas.move("feed2", x, -y)
-    window.after(TIMED_LOOP, feed_move)
-        
-feed_move()
+    window.update()
+    time.sleep(0.02)
 
 def move_player(x, y):
-    pass
+    canvas.move(player, x, y)
 
 def check_direction(direction):
-    pass
+    x = 0
+    if direction == "Left":
+        x -= SPEED
+    move_player(x, 0)
+
 def player_jump():
     pass
 
 def change_score():
-    pass
+    global score
+    coords = canvas.coords(player)
+    overlap = canvas.find_overlapping(coords[0], coords[1], coords[0]+stop.width(), coords[1]+stop.height())
+    feed_platform1 = canvas.find_withtag("feed1")
+    feed_platform2 = canvas.find_withtag("feed2")
+    for platform in feed_platform1:
+        if platform in overlap:
+            canvas.delete(platform)
+            score += 1
+            canvas.itemconfig(player_score, text="score: {}".format(score))
+    for platform in feed_platform2:
+        if platform in overlap:
+            canvas.delete(platform)
+            score += 1
+            canvas.itemconfig(player_score, text="score: {}".format(score))
+    return True
 
 def play_sound():
     pass
@@ -175,14 +205,15 @@ def new_game():
     pass
 
 def start_move(event):
+    print(event.keysym)
     if event.keysym not in KEY_PRESSED:
+        print("ok")
         KEY_PRESSED.append(event.keysym)
         if len(KEY_PRESSED) == 1:
             check_direction(event.keysym)
         
 def stop_move(event):
     global KEY_PRESSED
-    print(event.keysym)
     if event.keysym in KEY_PRESSED:
         KEY_PRESSED.remove(event.keysym)
 
