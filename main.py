@@ -157,10 +157,33 @@ enemy_move()
 
 
 def move_player():
-    canvas.move(player, -10, 0)
+    if KEY_PRESSED != []:
+        x = 0
+        if KEY_PRESSED[0] != "space":
+            remember = KEY_PRESSED[0]
+        if "Left" in KEY_PRESSED:
+            x -= SPEED
+            canvas.itemconfig(player, image=stop2)
+        elif "Right" in KEY_PRESSED:
+            x += SPEED
+            canvas.itemconfig(player, image=walk)
+        if "space" in KEY_PRESSED and not check_overlaping(0, GRAVITY_FORCE, True):
+            player_jum(30, remember)
+        if check_overlaping(x):
+            canvas.move(player, x, 0)
+            window.after(10, move_player)
 
-def player_jump():
-    pass
+def player_jump(force, remember):
+    if force > 0:
+        if check_overlaping(0, -force):
+            if remember == "Left":
+                canvas.itemconfig(player, image=jum_left)
+            elif remember == "Right":
+                canvas.itemconfig(player, image=jump)
+            canvas.move(player, 0, -force)
+            window.after(5, player_jum, force-1, remember)
+    else:
+        canvas.itemconfig(player, image=jump2)
 
 def change_score():
     global score
@@ -206,8 +229,8 @@ window.bind("<Key>", start_move)
 window.bind("<KeyRelease>", stop_move)
 
 # Feeds move
-x, y = 0, 10
-while RUNNING:
+def feed_move():
+    x, y = 0, 10
     feed1_coord = canvas.coords("feed1")
     feed2_coord = canvas.coords("feed2")
     if feed1_coord[1] <= 0:
@@ -216,8 +239,8 @@ while RUNNING:
         y = -y
     canvas.move("feed1", x, y)
     canvas.move("feed2", x, -y)
-    window.update()
-    time.sleep(0.02)
+    canvas.after(TIMED_LOOP, feed_move)
+feed_move()
 
 window.resizable(False, False)
 window.mainloop()
