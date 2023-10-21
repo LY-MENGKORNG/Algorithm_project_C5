@@ -11,7 +11,7 @@ window.iconphoto(False, icon)
 # constance 
 APP_WIDTH = window.winfo_screenwidth()
 APP_HEIGHT = window.winfo_screenheight() - 70
-X_VELOCITY, Y_VELOCITY = 7, 5
+X_VELOCITY, Y_VELOCITY = 9, 7
 RUNNING = True
 GRAVITY_FORCE = 9
 JUMP_FORCE = 25
@@ -42,7 +42,9 @@ canvas.create_image(0,0, image=bg_img, anchor=NW)
 
 # Player score
 score = 0
-player_score = canvas.create_text(100, 50, text="Score: {}".format(score),font=('consolas 25 bold'), fill="black")
+player_score = canvas.create_text(100, 50, text="Score: {}".format(score),
+                                            font=('Arial 25 bold'), 
+                                            fill="red")
 
 # Character
 stop = PhotoImage(file='frog_stop.png')
@@ -98,6 +100,8 @@ while x < APP_WIDTH :
         canvas.create_image(x + 500, 350, image=wall, tags="wall", anchor=NW)
     if x > 800 and x < 950:
         canvas.create_image(x, 200, image=wall, tags="wall", anchor=NW)
+    if x > 1050 and x < 1100:
+        canvas.create_image(x, 600, image=obstacles, tags="wall", anchor=NW)
     if x > 1150 and x < 1200:
         canvas.create_image(x, 100, image=wall, tags="wall", anchor=NW)
         canvas.create_image(x, 300, image=obstacles, tags="wall", anchor=NW)
@@ -151,28 +155,9 @@ def enemy_move():
     window.after(TIMED_LOOP, enemy_move)
 enemy_move()
 
-# Feeds move
-x, y = 0, 10
-while RUNNING:
-    feed1_coord = canvas.coords("feed1")
-    feed2_coord = canvas.coords("feed2")
-    if feed1_coord[1] <= 0:
-        y = -y
-    elif feed1_coord[1] + flies.height() >= APP_HEIGHT:
-        y = -y
-    canvas.move("feed1", x, y)
-    canvas.move("feed2", x, -y)
-    window.update()
-    time.sleep(0.02)
 
-def move_player(x, y):
-    canvas.move(player, x, y)
-
-def check_direction(direction):
-    x = 0
-    if direction == "Left":
-        x -= SPEED
-    move_player(x, 0)
+def move_player():
+    canvas.move(player, -10, 0)
 
 def player_jump():
     pass
@@ -187,12 +172,12 @@ def change_score():
         if platform in overlap:
             canvas.delete(platform)
             score += 1
-            canvas.itemconfig(player_score, text="score: {}".format(score))
+            window.itemconfig(player_score, text="score: {}".format(score))
     for platform in feed_platform2:
         if platform in overlap:
             canvas.delete(platform)
             score += 1
-            canvas.itemconfig(player_score, text="score: {}".format(score))
+            window.itemconfig(player_score, text="score: {}".format(score))
     return True
 
 def play_sound():
@@ -205,12 +190,10 @@ def new_game():
     pass
 
 def start_move(event):
-    print(event.keysym)
     if event.keysym not in KEY_PRESSED:
-        print("ok")
         KEY_PRESSED.append(event.keysym)
         if len(KEY_PRESSED) == 1:
-            check_direction(event.keysym)
+            move_player()
         
 def stop_move(event):
     global KEY_PRESSED
@@ -218,8 +201,23 @@ def stop_move(event):
         KEY_PRESSED.remove(event.keysym)
 
 
+
 window.bind("<Key>", start_move)
 window.bind("<KeyRelease>", stop_move)
+
+# Feeds move
+x, y = 0, 10
+while RUNNING:
+    feed1_coord = canvas.coords("feed1")
+    feed2_coord = canvas.coords("feed2")
+    if feed1_coord[1] <= 0:
+        y = -y
+    elif feed1_coord[1] + flies.height() >= APP_HEIGHT:
+        y = -y
+    canvas.move("feed1", x, y)
+    canvas.move("feed2", x, -y)
+    window.update()
+    time.sleep(0.02)
 
 window.resizable(False, False)
 window.mainloop()
