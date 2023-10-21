@@ -155,6 +155,17 @@ def enemy_move():
     window.after(TIMED_LOOP, enemy_move)
 enemy_move()
 
+def player_jump(force, remember):
+    if force > 0:
+        if check_overlaping(0, -force):
+            if remember == "Left":
+                canvas.itemconfig(player, image=jum_left)
+            elif remember == "Right":
+                canvas.itemconfig(player, image=jump)
+            canvas.move(player, 0, -force)
+            window.after(5, player_jum, force-1, remember)
+    else:
+        canvas.itemconfig(player, image=jump2)
 
 def move_player():
     if KEY_PRESSED != []:
@@ -168,22 +179,11 @@ def move_player():
             x += SPEED
             canvas.itemconfig(player, image=walk)
         if "space" in KEY_PRESSED and not check_overlaping(0, GRAVITY_FORCE, True):
-            player_jum(30, remember)
+            player_jump(30, remember)
         if check_overlaping(x):
             canvas.move(player, x, 0)
             window.after(10, move_player)
 
-def player_jump(force, remember):
-    if force > 0:
-        if check_overlaping(0, -force):
-            if remember == "Left":
-                canvas.itemconfig(player, image=jum_left)
-            elif remember == "Right":
-                canvas.itemconfig(player, image=jump)
-            canvas.move(player, 0, -force)
-            window.after(5, player_jum, force-1, remember)
-    else:
-        canvas.itemconfig(player, image=jump2)
 
 def change_score():
     global score
@@ -191,17 +191,17 @@ def change_score():
     overlap = canvas.find_overlapping(coords[0], coords[1], coords[0]+stop.width(), coords[1]+stop.height())
     feed_platform1 = canvas.find_withtag("feed1")
     feed_platform2 = canvas.find_withtag("feed2")
-    for platform in feed_platform1:
-        if platform in overlap:
-            canvas.delete(platform)
+    for platform1 in feed_platform1:
+        if platform1 in overlap:
+            canvas.delete("platform1")
             score += 1
-            window.itemconfig(player_score, text="score: {}".format(score))
-    for platform in feed_platform2:
-        if platform in overlap:
-            canvas.delete(platform)
+            canvas.itemconfig(player_score, text="score: {}".format(score))
+    for platform2 in feed_platform2:
+        if platform2 in overlap:
+            canvas.delete(platform2)
             score += 1
-            window.itemconfig(player_score, text="score: {}".format(score))
-    return True
+            canvas.itemconfig(player_score, text="score: {}".format(score))
+change_score()
 
 def play_sound():
     pass
@@ -230,18 +230,10 @@ window.bind("<KeyRelease>", stop_move)
 
 # Feeds move
 def feed_move():
-    x, y = 0, 10
-    feed1_coord = canvas.coords("feed1")
-    feed2_coord = canvas.coords("feed2")
-    if feed1_coord[1] <= 0:
-        y = -y
-    elif feed1_coord[1] + flies.height() >= APP_HEIGHT:
-        y = -y
-    canvas.move("feed1", x, y)
-    canvas.move("feed2", x, -y)
+    canvas.move("feed1", 0, Y_VELOCITY)
+    canvas.move("feed2", 0, -Y_VELOCITY)
     canvas.after(TIMED_LOOP, feed_move)
 feed_move()
 
 window.resizable(False, False)
 window.mainloop()
-
