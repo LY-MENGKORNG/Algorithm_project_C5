@@ -235,5 +235,7 @@ def feed_move():
     canvas.after(TIMED_LOOP, feed_move)
 feed_move()
 
+
+
 window.resizable(False, False)
 window.mainloop()
