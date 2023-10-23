@@ -163,7 +163,7 @@ def player_jump(force, remember):
             # elif remember == "Right":
             #     canvas.itemconfig(player, image=jump)
             canvas.move(player, 0, -force)
-            window.after(5, player_jum, force-1, remember)
+            window.after(5, player_jump, force-1, remember)
     else:
         canvas.itemconfig(player, image=jump2)
 
@@ -202,6 +202,10 @@ def change_score():
             score += 1
             canvas.itemconfig(player_score, text="score: {}".format(score))
 change_score()
+ 
+   
+
+
 
 def play_sound():
     pass
