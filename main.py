@@ -163,7 +163,7 @@ def player_jump(force, remember):
             # elif remember == "Right":
             #     canvas.itemconfig(player, image=jump)
             canvas.move(player, 0, -force)
-            window.after(5, player_jum, force-1, remember)
+            window.after(5, player_jump, force-1, remember)
     else:
         canvas.itemconfig(player, image=jump2)
 
@@ -235,5 +235,104 @@ def feed_move():
     canvas.after(TIMED_LOOP, feed_move)
 feed_move()
 
-window.resizable(False, False)
+#level2
+def window_level3():
+    window2=Tk()
+    window2.title("mission_frog_level3")
+    window2.mainloop()
+#     # App center
+# screen_width = window.winfo_screenwidth()
+# screen_height = window.winfo_screenheight() - 70
+# x = int((screen_width / 2) - (SCREEN_WIDTH / 2))
+# y = int((screen_height / 2) - (SCREEN_HEIGHT / 2))
+# window.geometry(f'{SCREEN_WIDTH}x{SCREEN_HEIGHT}+{x}+{y}')
+
+# # Frame
+# frame = Frame(window, width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
+# frame.pack()
+
+# # Canvas
+# canvas = Canvas(frame,width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
+# canvas.pack()
+
+#image
+lake1_file = PhotoImage(file='background_level3.png')
+canvas.create_image(0,0, image = lake1_file, anchor=NW)
+
+#shape
+
+grasses=PhotoImage(file='grass.png')
+stones = PhotoImage(file='stone.png')
+lands = PhotoImage(file='land.png')
+bees = PhotoImage(file='bee_level3.png')
+flies = PhotoImage(file='fly_level3.png')
+frog= PhotoImage(file='frog_level3.png')
+shower= PhotoImage(file='flower.png')
+shower_white= PhotoImage(file='white_flower.png')
+
+#player level3
+
+canvas.create_image(100,450, image = stones, tags ='stone')
+canvas.create_image(700,450, image = stones, tags ='stone')
+canvas.create_image(1300,600, image = stones, tags ='stone')
+canvas.create_image(1300,200, image = stones, tags ='stone')
+
+player =canvas.create_image(200,50, image=frog)
+
+canvas.create_image(100,200, image = grasses, tags ='feeds')
+canvas.create_image(100,600, image = grasses, tags ='feeds')
+canvas.create_image(500,500, image = grasses, tags ='feeds')
+canvas.create_image(1000,550, image = grasses, tags ='feeds')
+canvas.create_image(900,450, image = grasses, tags ='feeds')
+canvas.create_image(600,350, image = grasses, tags ='feeds')
+canvas.create_image(800,250, image = grasses, tags ='feeds')
+canvas.create_image(300,300, image = grasses, tags ='feeds')
+
+
+canvas.create_image(500,100, image =lands, tags ='feeds')
+canvas.create_image(200,400, image =lands, tags ='feeds')
+canvas.create_image(300,600, image =lands, tags ='feeds')
+canvas.create_image(700,650, image =lands, tags ='feeds')
+canvas.create_image(1000,200, image =lands, tags ='feeds')
+canvas.create_image(1200,400, image =lands, tags ='feeds')
+
+canvas.create_image(400,300, image =bees, tags ='bee')
+canvas.create_image(900,600, image =bees, tags ='bee')
+canvas.create_image(1000,200, image =bees, tags ='bee')
+canvas.create_image(1300,500, image =bees, tags ='bee')
+
+canvas.create_image(800,550, image = shower, tags ='flowers')
+canvas.create_image(600,600, image = shower_white, tags ='flowers')
+
+canvas.create_image(400,100, image =flies, tags ='fly')
+canvas.create_image(300,100, image =flies, tags ='fly')
+canvas.create_image(1000,100, image =flies, tags ='fly')
+canvas.create_image(900,100, image =flies, tags ='fly')
+canvas.create_image(600,300, image =flies, tags ='fly')
+canvas.create_image(400,200, image =flies, tags ='fly')
+canvas.create_image(500,600, image =flies, tags ='fly')
+canvas.create_image(700,400, image =flies, tags ='fly')
+canvas.create_image(900,600, image =flies, tags ='fly')
+canvas.create_image(200,100, image =flies, tags ='fly')
+canvas.create_image(500,500, image =flies, tags ='fly')
+canvas.create_image(1300,300, image =flies, tags ='fly')
+canvas.create_image(1100,400, image =flies, tags ='fly')
+canvas.create_image(800,300, image =flies, tags ='fly')
+canvas.create_image(3000,400, image =flies, tags ='fly')
+canvas.create_image(700,600, image =flies, tags ='fly')
+canvas.create_image(200,100, image =flies, tags ='fly')
+canvas.create_image(300,500, image =flies, tags ='fly')
+canvas.create_image(600,400, image =flies, tags ='fly')
+canvas.create_image(300,600, image =flies, tags ='fly')
+canvas.create_image(600,100, image =flies, tags ='fly')
+canvas.create_image(1200,500, image =flies, tags ='fly')
+canvas.create_image(1100,400, image =flies, tags ='fly')
+canvas.create_image(1300,600, image =flies, tags ='fly')
+canvas.create_image(1000,100, image =flies, tags ='fly')
+canvas.create_image(1200,100, image =flies, tags ='fly')
+canvas.create_image(1100,150, image =flies, tags ='fly')
+canvas.create_image(1300,100, image =flies, tags ='fly')
+canvas.create_image(12000,200, image =flies, tags ='fly')
+
+# window.resizable(False, False)
 window.mainloop()
