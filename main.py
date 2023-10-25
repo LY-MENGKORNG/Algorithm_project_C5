@@ -18,10 +18,15 @@ GRAVITY_FORCE = 9
 JUMP_FORCE = 25
 KEY_PRESSED = []
 TIMED_LOOP = 15
+<<<<<<< HEAD
 SPEED = 6
 RUNNING = False
 POSITION_CONFIG = [100, -100, 200, -200]
 
+=======
+SPEED = 7
+RUNNING = False
+>>>>>>> 1c62e4ea8c24fe6c742812e40871f5e9eafd5bf6
 
 # App center
 screen_width = window.winfo_screenwidth()
@@ -49,6 +54,12 @@ house = PhotoImage(file='bee_house.png')
 
 # Player score
 score = 0
+<<<<<<< HEAD
+=======
+player_score = canvas.create_text(100, 50, text="Score: " + str(score),
+                                            font=('Arial 25 bold'), 
+                                            fill="red")
+>>>>>>> 1c62e4ea8c24fe6c742812e40871f5e9eafd5bf6
 
 # Character
 stop = PhotoImage(file='frog_stop.png')
@@ -79,6 +90,42 @@ stone = PhotoImage(file='stone.png')
 ground = PhotoImage(file='ground.png')
 obstacles = PhotoImage(file='obstacles.png')
 recall = PhotoImage(file='recall.png')
+<<<<<<< HEAD
+=======
+x, y = 0, APP_HEIGHT - wall.height()
+while x <= APP_WIDTH:
+    if (x >= int(APP_WIDTH / 4) and x <= int(APP_WIDTH / 3)-100) or (x >= int(APP_WIDTH - 200) and x <= int(APP_WIDTH - 150)):
+        canvas.create_image(x, y, image=obstacles, anchor=NW, tags= "kill")
+        x += obstacles.width()
+    else:
+        canvas.create_image(x, y, image=wall2, anchor=NW, tags="wall")
+    x += wall.width()
+canvas.create_image(250, 400, image=obstacles, anchor=NW, tags="kill")
+
+x = 100
+while x < APP_WIDTH :
+    if x < 200:
+        canvas.create_image(x, 500, image=wall, tags="wall", anchor=NW)
+        canvas.create_image(x+400, 500, image=wall, tags="wall", anchor=NW)
+    if x > 200 and x < 400:
+        canvas.create_image(x, 400, image=wall, tags="wall", anchor=NW)
+        canvas.create_image(x+400, 400, image=wall, tags="wall", anchor=NW)
+    if x > 400 and x < 450:
+        canvas.create_image(x, 300, image=obstacles, tags="kill", anchor=NW)
+        canvas.create_image(x + 400, 400, image=obstacles, tags="kill", anchor=NW)
+    if x > 550 and x < 600:
+        canvas.create_image(x, 600, image=obstacles, tags="kill", anchor=NW)
+        canvas.create_image(x + 500, 350, image=wall, tags="wall", anchor=NW)
+    if x > 800 and x < 950:
+        canvas.create_image(x, 200, image=wall, tags="wall", anchor=NW)
+    if x > 1050 and x < 1100:
+        canvas.create_image(x, 600, image=obstacles, tags="kill", anchor=NW)
+    if x > 1150 and x < 1200:
+        canvas.create_image(x, 100, image=wall, tags="wall", anchor=NW)
+        canvas.create_image(x, 300, image=obstacles, tags="kill", anchor=NW)
+        canvas.create_image(x - 80, -60, image=recall, tags="recall", anchor=NW)
+    x += wall.width()
+>>>>>>> 1c62e4ea8c24fe6c742812e40871f5e9eafd5bf6
 
 # Player
 
@@ -93,13 +140,26 @@ enemy_height = bee_right.height()
 # FUNCTION-----------------------------------------------------
 # Delete interface
 
+<<<<<<< HEAD
 # Level button
 btn_1 = PhotoImage(file='Button1.png')
 btn_2 = PhotoImage(file='Button2.png')
 btn_3 = PhotoImage(file='Button3.png')
+=======
+def delete_interface(event):
+    canvas.delete("bg_st")
+    canvas.delete("start_game")
+    level()
+
+def level():
+    gravity()
+    enemy_move()
+    feed_move()
+>>>>>>> 1c62e4ea8c24fe6c742812e40871f5e9eafd5bf6
 
 # Game start 
 button_img = PhotoImage(file='Button.png')
+<<<<<<< HEAD
 cancel_btn = PhotoImage(file='cancel_btn.png')
 restart_btn = PhotoImage(file='restart_btn.png')
 back_btn = PhotoImage(file='back_btn.png')
@@ -241,6 +301,11 @@ def game_start():
     canvas.tag_bind("start_game","<Button-1>", level)
 game_start()
 
+=======
+canvas.create_image(0,0, image=st_bg, anchor=NW, tags="bg_st")
+canvas.create_image(APP_WIDTH/2 - 120, APP_HEIGHT / 2-80, image=button_img, anchor=NW, tags="start_game")
+canvas.tag_bind("start_game","<Button-1>", delete_interface)
+>>>>>>> 1c62e4ea8c24fe6c742812e40871f5e9eafd5bf6
 
 # check if player and enemy overlap
 def check_overlaping(x_direction=0, y_direction=0, ground=False):
@@ -256,7 +321,10 @@ def check_overlaping(x_direction=0, y_direction=0, ground=False):
     for plf2 in feed_pfs2:
         if plf2 in overlap:
             change_score(plf2)
+<<<<<<< HEAD
             return
+=======
+>>>>>>> 1c62e4ea8c24fe6c742812e40871f5e9eafd5bf6
     if coord[0] + x_direction < 0 or coord[0] + x_direction > APP_WIDTH:
         return False
     if ground:
@@ -266,7 +334,32 @@ def check_overlaping(x_direction=0, y_direction=0, ground=False):
             return False
     return True
 
+<<<<<<< HEAD
 # Player's jumping
+=======
+# underground's gravity on player
+def gravity():
+    if check_overlaping(0, GRAVITY_FORCE, True) and checkgame_over():
+        canvas.move(player, 0, GRAVITY_FORCE)
+    window.after(TIMED_LOOP, gravity)
+
+# movement of enemy
+def enemy_move():
+    global X_VELOCITY, Y_VELOCITY
+    if checkgame_over():
+        enemy_coord = canvas.coords(enemy)
+        if (enemy_coord[0] <= 30) or (enemy_coord[0] + enemy_width >= APP_WIDTH - 30):
+            X_VELOCITY = -X_VELOCITY
+            if X_VELOCITY > 0:
+                canvas.itemconfig(enemy, image=bee_right)
+            else :
+                canvas.itemconfig(enemy, image=bee_left)
+        elif (enemy_coord[1] <= 30) or (enemy_coord[1] + enemy_height >= APP_HEIGHT - 30):
+            Y_VELOCITY = -Y_VELOCITY
+        canvas.move(enemy, X_VELOCITY, Y_VELOCITY)
+        window.after(TIMED_LOOP, enemy_move)
+
+>>>>>>> 1c62e4ea8c24fe6c742812e40871f5e9eafd5bf6
 def player_jump(force):
     if force > 0:
         if check_overlaping(0, -force):
@@ -274,7 +367,11 @@ def player_jump(force):
             window.after(5, player_jump, force-1)
 
 def move_player():
+<<<<<<< HEAD
     if KEY_PRESSED != [] and checkgame_over() and checkgame_win():
+=======
+    if KEY_PRESSED != [] and checkgame_over():
+>>>>>>> 1c62e4ea8c24fe6c742812e40871f5e9eafd5bf6
         x = 0
         remember = KEY_PRESSED[0]
         if "Left" in KEY_PRESSED:
@@ -282,7 +379,11 @@ def move_player():
             canvas.itemconfig("player", image=stop2)
         elif "Right" in KEY_PRESSED:
             x += SPEED
+<<<<<<< HEAD
             canvas.itemconfig("player", image=stop)
+=======
+            canvas.itemconfig(player, image=stop)
+>>>>>>> 1c62e4ea8c24fe6c742812e40871f5e9eafd5bf6
         if "space" in KEY_PRESSED and not check_overlaping(0, GRAVITY_FORCE, True):
             jump_sound()
             player_jump(JUMP_FORCE)
@@ -384,6 +485,7 @@ def stop_move(event):
     if event.keysym in KEY_PRESSED:
         KEY_PRESSED.remove(event.keysym)
 
+<<<<<<< HEAD
 # Feeds move
 def feed_move():
     global Y_VELOCITY
@@ -419,15 +521,26 @@ def enemy_move(X_VELOCITY, Y_VELOCITY):
         canvas.move("enemy", X_VELOCITY, Y_VELOCITY)
         window.after(TIMED_LOOP, enemy_move, X_VELOCITY, Y_VELOCITY)
 
+=======
+>>>>>>> 1c62e4ea8c24fe6c742812e40871f5e9eafd5bf6
 window.bind("<Key>", start_move)
 window.bind("<KeyRelease>", stop_move)
 
 # Feeds move
 def feed_move():
+<<<<<<< HEAD
     canvas.move("feed1", 0, Y_VELOCITY)
     canvas.move("feed2", 0, -Y_VELOCITY)
     canvas.after(TIMED_LOOP, feed_move)
 feed_move()
+=======
+    if checkgame_over():
+        canvas.move("feed1", 0, Y_VELOCITY)
+        canvas.move("feed2", 0, -Y_VELOCITY)
+        canvas.after(TIMED_LOOP, feed_move)
+    else :
+        game_over() 
+>>>>>>> 1c62e4ea8c24fe6c742812e40871f5e9eafd5bf6
 
 window.resizable(False, False)
 window.mainloop()
