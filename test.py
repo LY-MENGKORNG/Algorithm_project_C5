@@ -12,8 +12,6 @@ bg= PhotoImage(file='background.png')
 canvas.create_image(0, 0, image=bg,anchor=NW, tags="background1")
 canvas.create_image(WIDTH, 0, image=bg,anchor=NW, tags="background2")
 
-arr = []
-
 def bg_scroll():
     if canvas.coords("background2")[0] <= 0:
         canvas.move("background2", WIDTH, 0)
