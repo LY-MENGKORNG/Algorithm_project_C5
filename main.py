@@ -328,5 +328,9 @@ canvas.create_image(1100,150, image =flies, anchor=NW, tags ='fly')
 canvas.create_image(1300,100, image =flies, anchor=NW, tags ='fly')
 canvas.create_image(12000,200, image =flies, anchor=NW, tags ='fly')
 
+# def check_move():
+#     cood = canvas(player)
+    
+
 window.resizable(False, False)
 window.mainloop()
