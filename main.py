@@ -522,5 +522,12 @@ game_start()
 window.bind("<Key>", start_move)
 window.bind("<KeyRelease>", stop_move)
 
+# Feeds move
+def feed_move():
+    canvas.move("feed1", 0, Y_VELOCITY)
+    canvas.move("feed2", 0, -Y_VELOCITY)
+    canvas.after(TIMED_LOOP, feed_move)
+feed_move()
+
 window.resizable(False, False)
 window.mainloop()
