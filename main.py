@@ -65,6 +65,7 @@ jump2 = PhotoImage(file='frog_jump2.png')
 jum_left = PhotoImage(file='frog_jump_left.png')
 jum_left2 = PhotoImage(file='frog_jump_left2.png')
 cry = PhotoImage(file='frog_cry.png')
+laugh = PhotoImage(file='frog_won.png')
 
 # Level 2 player
 frog2 = PhotoImage(file='frog2.png')
@@ -86,9 +87,6 @@ obstacles = PhotoImage(file='obstacles.png')
 recall = PhotoImage(file='recall.png')
 recall2 = PhotoImage(file='recall2.png')
 
-# Player
-
-
 # Enemy
 bee_left = PhotoImage(file='bee_left.png')
 bee_right = PhotoImage(file='bee_right.png')
@@ -108,13 +106,22 @@ cancel_btn = PhotoImage(file='cancel_btn.png')
 restart_btn = PhotoImage(file='restart_btn.png')
 back_btn = PhotoImage(file='back_btn.png')
 next_btn = PhotoImage(file='next_btn.png')
+again_btn = PhotoImage(file='again_btn.png')
 
-# background run
+# Player command
+command = "level1"
+
+# Game start
+def game_start():
+    canvas.create_image(0,0, image=st_bg, anchor=NW, tags="bg_st")
+    canvas.create_image(APP_WIDTH/2 - 120, APP_HEIGHT / 2-80, image=button_img, anchor=NW, tags="start_game")
+    open_sound()
+    canvas.tag_bind("start_game","<Button-1>", level)
+
+# background run on level 3
 def bg_run():
-    print(canvas.coords("level3_bg")[0])
     if canvas.coords("level3_bg")[0] + level3_bg.width() == 0:
         canvas.move("level3_bg", level3_bg.width(), 0)
-
     if canvas.coords("level3_bg2")[0] == 0:
         canvas.move("level3_bg2", APP_WIDTH, 0)
     canvas.move("level3_bg2", -2, 0)
@@ -123,6 +130,7 @@ def bg_run():
 
 # LEVEL 1 ------------------------------------------------------------
 def level1(event):
+    command = "level1"
     score = 0
     canvas.delete(ALL)
     canvas.create_image(0,0, image=bg_img, anchor=NW, tags="first_bg")
@@ -192,13 +200,14 @@ def level1(event):
     canvas.tag_bind("back_btn", "<Button-1>", level)
 
     # Process game
-    gravity()
-    feed_move(7)
-    enemy_move(9, 7)
+    gravity(command)
+    feed_move(7, command)
+    enemy_move(9, 7, command)
 
 # LEVEL 3------------------------------------------------------------
 def level2(event):
     score = 0
+    command = "level2"
     canvas.delete(ALL)
     canvas.create_image(0,0, image=level2_bg, anchor=NW, tags="background1")
     canvas.create_text(150, 30, text="Score: " + str(score),font=('Arial 25 bold'), fill="black", tags="player_score")
@@ -216,7 +225,7 @@ def level2(event):
     canvas.create_image(500, 100, image=stone, anchor=NW, tags="wall")
 
     # recall 
-    canvas.create_image(APP_WIDTH - 100, 200, image=recall2, anchor=NW, tags="recall")
+    canvas.create_image(APP_WIDTH - 250, 100, image=recall2, anchor=NW, tags="recall")
 
     # Enemy
     canvas.create_image(APP_WIDTH - 300, 100, image=bee2_left, anchor=NW, tags="enemy")
@@ -228,13 +237,14 @@ def level2(event):
     canvas.tag_bind("back_btn", "<Button-1>", level)
 
     # Processes
-    gravity()
-    feed_move(7)
-    enemy_move(7, 5)
+    gravity(command)
+    feed_move(7, command)
+    enemy_move(9, 7, command)
 
 # LEVEL 3 ------------------------------------------------------------
 def level3(event):
     score = 0
+    command = "level3"
     canvas.delete(ALL)
 #flower on water
     canvas.create_image(0, 0, image=level3_bg, anchor=NW, tags="level3_bg")
@@ -252,17 +262,8 @@ def level3(event):
     canvas.create_image(500, 500, image=flies2, anchor=NW, tags="feed1")
     canvas.create_image(700, 100, image=flies2, anchor=NW, tags="feed2")
     canvas.create_image(600, 300, image=flies2, anchor=NW, tags="feed1")
-    canvas.create_image(700, 400, image=flies2, anchor=NW, tags="feed1")
-    canvas.create_image(800, 200, image=flies2, anchor=NW, tags="feed2")
-    canvas.create_image(900, 400, image=flies2, anchor=NW, tags="feed2")
-    canvas.create_image(1000, 300, image=flies2, anchor=NW, tags="feed1")
-    canvas.create_image(1100, 500, image=flies2, anchor=NW, tags="feed1")
-    canvas.create_image(1200, 400, image=flies2, anchor=NW, tags="feed1")
-    canvas.create_image(1300, 500, image=flies2, anchor=NW, tags="feed2")
-    canvas.create_image(200, 500, image=flies2, anchor=NW, tags="feed1")
-    canvas.create_image(300, 600, image=flies2, anchor=NW, tags="feed2")
-    canvas.create_image(1300, 100, image=flies2, anchor=NW, tags="feed1")
-    canvas.create_image(1300, 300, image=flies2, anchor=NW, tags="feed2")
+    canvas.create_image(900, 400, image=flies2, anchor=NW, tags="feed1")
+    canvas.create_image(1000, 200, image=flies2, anchor=NW, tags="feed2")
 
 #land
     canvas.create_image(100,550, image= stone2, anchor=NW, tags='wall')
@@ -280,27 +281,23 @@ def level3(event):
     canvas.create_image(500,100, image=stone, anchor=NW, tags='wall')
     canvas.create_image(300,500, image=stone, anchor=NW, tags='wall')
     canvas.create_image(800,200, image=stone, anchor=NW, tags='wall')
-    canvas.create_image(800,400, image=stone, anchor=NW, tags='wall')
     canvas.create_image(600,600, image=stone, anchor=NW, tags='wall')
 
-    # canvas.create_image(600,400, image=stone3, anchor=NW, tags='stone')
-    # canvas.create_image(1200,100, image=stone3, anchor=NW, tags='stone')
-    # canvas.create_image(1100,500, image=stone3, anchor=NW, tags='stone')
+    canvas.create_image(600,400, image=stone, anchor=NW, tags='wall')
+    canvas.create_image(1200,100, image=stone, anchor=NW, tags='wall')
+    canvas.create_image(1100,500, image=stone, anchor=NW, tags='wall')
 
 #bee
     canvas.create_image(200,300, image= bee2_left, anchor=NW, tags='enemy')
-    # canvas.create_image(800,200, image= bee2_left, anchor=NW, tags='enemy')
-    # canvas.create_image(900,550, image= bee2_left, anchor=NW, tags='enemy')
-    # canvas.create_image(1100,400, image= bee2_left, anchor=NW, tags='enemy')
+
     # back btn
     canvas.create_image(5,5, image=back_btn, anchor=NW, tags="back_btn")
     canvas.tag_bind("back_btn", "<Button-1>", level)
-    # canvas.create_image(0,0, image=level3_bg, anchor=NW, tags="level3_bg")
-    # canvas.create_image(level3_bg.width(),0, image=level3_bg, anchor=NW, tags="level3_bg2")
-    # bg_run()
-    gravity()
-    feed_move(7)
-    enemy_move(9, 7)
+
+    # Process
+    gravity(command)
+    feed_move(7, command)
+    enemy_move(9, 7, command)
 
 # ALL LEVEL ------------------------------------------------------------
 def level(event): # show all level
@@ -315,11 +312,37 @@ def level(event): # show all level
     canvas.tag_bind("level2", "<Button-1>", level2)
     canvas.tag_bind("level3", "<Button-1>", level3)
 
-def game_start():
-    canvas.create_image(0,0, image=st_bg, anchor=NW, tags="bg_st")
-    canvas.create_image(APP_WIDTH/2 - 120, APP_HEIGHT / 2-80, image=button_img, anchor=NW, tags="start_game")
-    canvas.tag_bind("start_game","<Button-1>", level)
-game_start()
+def change_score(platform):
+    global score
+    score += 1
+    canvas.delete(platform)
+    eat_sound()
+    canvas.itemconfig("player_score", text="score:" + str(score))
+
+def open_sound():
+    mixer.init() 
+    mixer.music.load('gta-san-andreas-mission-complete-sound-hq.mp3') 
+    mixer.music.play() 
+
+def eat_sound():
+    mixer.init() 
+    mixer.music.load('eat.mp3')
+    mixer.music.play() 
+
+def win_sound():
+    mixer.init() 
+    mixer.music.load('victory-mario-series-hq-super-smash-bros.mp3') 
+    mixer.music.play() 
+
+def over_sound():
+    mixer.init() 
+    mixer.music.load('the-price-is-right-losing-horn_2.mp3') 
+    mixer.music.play() 
+
+def jump_sound():
+    mixer.init() 
+    mixer.music.load('touch.mp3') 
+    mixer.music.play() 
 
 # check if player and enemy overlap
 def check_overlaping(x_direction=0, y_direction=0, ground=False):
@@ -353,7 +376,8 @@ def player_jump(force):
             window.after(5, player_jump, force-1)
 
 def move_player():
-    if KEY_PRESSED != [] and checkgame_over():
+    global command
+    if KEY_PRESSED != [] and checkgame_over(command):
         x = 0
         remember = KEY_PRESSED[0]
         if "Left" in KEY_PRESSED:
@@ -384,70 +408,67 @@ def move_player():
             canvas.move("player", x, 0)
             window.after(TIMED_LOOP, move_player)
 
-def change_score(platform):
-    global score
-    score += 1
-    canvas.delete(platform)
-    eat_sound()
-    canvas.itemconfig("player_score", text="score:" + str(score))
-
-def eat_sound():
-    mixer.init() 
-    mixer.music.load('eat.mp3')
-    mixer.music.play() 
-def over_sound():
-    mixer.init() 
-    mixer.music.load('tf_nemesis.mp3') 
-    mixer.music.play() 
-
-def jump_sound():
-    mixer.init() 
-    mixer.music.load('touch.mp3') 
-    mixer.music.play() 
-
-def game_over():
+def game_over(command):
     global score
     over_sound()
     canvas.delete(ALL)
     canvas.create_rectangle(0, 0, APP_WIDTH, APP_HEIGHT, fill="skyblue", outline="",tags="over")
     canvas.create_image(550, 100, image=cry, anchor=NW, tags="over")
-    canvas.create_text(APP_WIDTH / 2, APP_HEIGHT / 2 + 30, text="YOU LOST!", font=("Ink free", 50, "bold"), fill="red",tags="over")
+    canvas.create_text(APP_WIDTH / 2, APP_HEIGHT / 2 + 30, text="YOU LOST!", font=("Ink free", 70, "bold"), fill="red",tags="over")
     canvas.create_text(APP_WIDTH / 2, APP_HEIGHT / 2 + 100, text="Your score: "+ str(score), font=("Ink free", 30, "bold"), fill="green",tags="over")
     canvas.create_image(APP_WIDTH / 2 - 300, APP_HEIGHT / 2 + 150, image=cancel_btn,anchor=NW,tags="cancel")
     canvas.create_image(APP_WIDTH / 2, APP_HEIGHT / 2 + 150, image=restart_btn,anchor=NW,tags="restart")
     canvas.tag_bind("cancel", "<Button-1>", level)
-    canvas.tag_bind("restart", "<Button-1>", level1)
+    if command == "level1":
+        canvas.tag_bind("restart", "<Button-1>", level1)
+
+    if command == "level2":
+        canvas.tag_bind("restart", "<Button-1>", level2)
+
+    elif command == "level3":
+        canvas.tag_bind("restart", "<Button-1>", level3)
     return
 
-def checkgame_over():
+def checkgame_over(command):
     coord = canvas.coords("player")
     kill_plf = canvas.find_withtag("kill")
     enemy_plfs = canvas.find_withtag("enemy")
     overlap = canvas.find_overlapping(coord[0], coord[1], coord[0]+stop.width(), coord[1]+stop.height())
     for enemy_plf in enemy_plfs:
         if enemy_plf in overlap:
-            game_over()
+            game_over(command)
             return False
     for plf in kill_plf:
         if plf in overlap:
             return False
     return True
-
-def game_win():
-    canvas.create_rectangle(0,0,APP_WIDTH, APP_HEIGHT, fill="skyblue")
-    canvas.create_text(APP_WIDTH / 2, APP_HEIGHT / 2, text="YOU WON!", font=("Ink free", 70, "bold"))
-    canvas.create_text(APP_WIDTH / 2, APP_HEIGHT / 2 - 200, text="Now I know you, you're a Frog!", font=("consolas", 25))
-    canvas.create_image(APP_WIDTH / 2, APP_HEIGHT / 2 + 100, image=next_btn, anchor=CENTER, tags="next")
-    canvas.tag_bind("next", "<Button-1>", level)
+    
+def game_win(command):
+    global score
+    win_sound()
+    canvas.delete(ALL)
+    canvas.create_rectangle(0, 0, APP_WIDTH, APP_HEIGHT, fill="skyblue", outline="")
+    canvas.create_image(550, 100, image=laugh, anchor=NW)
+    canvas.create_text(APP_WIDTH / 2, APP_HEIGHT / 2 + 30, text="YOU WON!", font=("Ink free", 70, "bold"), fill="red")
+    canvas.create_text(APP_WIDTH / 2, APP_HEIGHT / 2 + 100, text="Your score: "+ str(score), font=("Ink free", 30, "bold"), fill="green")
+    canvas.create_image(APP_WIDTH / 2 - 300, APP_HEIGHT / 2 + 150, image=again_btn,anchor=NW,tags="again")
+    canvas.create_image(APP_WIDTH / 2, APP_HEIGHT / 2 + 150, image=next_btn,anchor=NW,tags="next")
+    canvas.tag_bind("again", "<Button-1>", level1)
+    if command == "level1":
+        canvas.tag_bind("next", "<Button-1>", level2)
+    elif command == "level2":
+        canvas.tag_bind("next", "<Button-1>", level3)
+    elif command == "level3":
+        canvas.tag_bind("next", "<Button-1>", level)
     return
 
-def checkgame_win():
+def checkgame_win(command):
     coord = canvas.coords("player")
     recall_plf = canvas.find_withtag("recall")
     overlap = canvas.find_overlapping(coord[0], coord[1], coord[0], coord[1])
     for plf in recall_plf:
-        if plf in overlap and score >= 10:
-            canvas.after(1000, game_win)
+        if plf in overlap and score >= 1:
+            canvas.after(1000, game_win, command)
             return False
     return True
 
@@ -463,26 +484,26 @@ def stop_move(event):
         KEY_PRESSED.remove(event.keysym)
 
 # underground's gravity on player
-def gravity():
-    if check_overlaping(0, GRAVITY_FORCE, True) and checkgame_over() and checkgame_win():
+def gravity(command):
+    if check_overlaping(0, GRAVITY_FORCE, True) and checkgame_over(command) and checkgame_win(command):
         canvas.move("player", 0, GRAVITY_FORCE)
-    window.after(TIMED_LOOP, gravity)
+    window.after(TIMED_LOOP, gravity, command)
 
 # Feeds move
-def feed_move(Y_VELOCITY):
-    if checkgame_over():
+def feed_move(Y_VELOCITY, command):
+    if checkgame_over(command):
         if canvas.coords("feed1")[1] <= 0 or canvas.coords("feed1")[1] >= APP_HEIGHT:
             Y_VELOCITY = -Y_VELOCITY
         canvas.move("feed1", 0, Y_VELOCITY)
         canvas.move("feed2", 0, -Y_VELOCITY)
         canvas.move("feed3", Y_VELOCITY, 0)
-        canvas.after(TIMED_LOOP, feed_move, Y_VELOCITY)
+        canvas.after(TIMED_LOOP, feed_move, Y_VELOCITY, command)
     else:
-        canvas.after(1000, game_over)
+        canvas.after(1000, game_over, command)
 
 # movement of enemy
-def enemy_move(X_VELOCITY, Y_VELOCITY):
-    if checkgame_over() and checkgame_win():
+def enemy_move(X_VELOCITY, Y_VELOCITY, command):
+    if checkgame_over(command) and checkgame_win(command):
         enemy_coord = canvas.coords("enemy")
         if (enemy_coord[0] <= 30) or (enemy_coord[0] + enemy_width >= APP_WIDTH - 30):
             X_VELOCITY = -X_VELOCITY
@@ -493,7 +514,10 @@ def enemy_move(X_VELOCITY, Y_VELOCITY):
         elif (enemy_coord[1] <= 30) or (enemy_coord[1] + enemy_height >= APP_HEIGHT - 30):
             Y_VELOCITY = -Y_VELOCITY
         canvas.move("enemy", X_VELOCITY, Y_VELOCITY)
-        window.after(TIMED_LOOP, enemy_move, X_VELOCITY, Y_VELOCITY)
+        window.after(TIMED_LOOP, enemy_move, X_VELOCITY, Y_VELOCITY, command)
+
+# Game start
+game_start()
 
 window.bind("<Key>", start_move)
 window.bind("<KeyRelease>", stop_move)
