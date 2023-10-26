@@ -127,6 +127,7 @@ def level1(event):
     # Back to see the level
     canvas.create_image(5,5, image=back_btn, anchor=NW, tags="back_btn")
 
+
 # wall, obstacle and flies
     x, y = 0, APP_HEIGHT - wall.height()
     while x <= APP_WIDTH:
@@ -185,7 +186,11 @@ def level1(event):
     gravity()
     enemy_move(7, 5)
     feed_move()
-
+def game_start():
+    canvas.create_image(0,0, image=st_bg, anchor=NW, tags="bg_st")
+    canvas.create_image(APP_WIDTH/2 - 120, APP_HEIGHT / 2-80, image=button_img, anchor=NW, tags="start_game")
+    open_sound()
+    canvas.tag_bind("start_game","<Button-1>", level)
 # LEVEL 1
 def level2(event):
     canvas.delete(ALL)
