@@ -255,7 +255,15 @@ def level(event): # show all level
     canvas.tag_bind("level2", "<Button-1>", level2)
     # canvas.tag_bind("level3", "<Button-1>", level3)
 
-
+def checkgame_win(command):
+    coord = canvas.coords("player")
+    recall_plf = canvas.find_withtag("recall")
+    overlap = canvas.find_overlapping(coord[0], coord[1], coord[0], coord[1])
+    for plf in recall_plf:
+        if plf in overlap and score >= 1:
+            canvas.after(1000, game_win, command)
+            return False
+    return True
 def game_start():
     canvas.create_image(0,0, image=st_bg, anchor=NW, tags="bg_st")
     canvas.create_image(APP_WIDTH/2 - 120, APP_HEIGHT / 2-80, image=button_img, anchor=NW, tags="start_game")
@@ -439,6 +447,7 @@ def enemy_move(X_VELOCITY, Y_VELOCITY):
             Y_VELOCITY = -Y_VELOCITY
         canvas.move("enemy", X_VELOCITY, Y_VELOCITY)
         window.after(TIMED_LOOP, enemy_move, X_VELOCITY, Y_VELOCITY)
+
 
 window.bind("<Key>", start_move)
 window.bind("<KeyRelease>", stop_move)
