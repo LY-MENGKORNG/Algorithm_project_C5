@@ -191,17 +191,17 @@ def level2(event):
     canvas.delete(ALL)
     canvas.create_image(0,0, image=level2_bg, anchor=NW, tags="background1")
     canvas.create_image(200, 200, image=flies2, anchor=NW, tags="feed3")
-    canvas.create_image(400, 200, image=flies2, anchor=NW, tags="feed4")
+    canvas.create_image(940, 300, image=flies2, anchor=NW, tags="feed4")
     canvas.create_image(700, 100, image=flies2, anchor=NW, tags="feed3")
     canvas.create_image(900, 600, image=flies2, anchor=NW, tags="feed4")
     canvas.create_image(100, 100, image=flies2, anchor=NW, tags="feed5")
-    canvas.create_image(600, 600, image=flies2, anchor=NW, tags="feed4")
+    canvas.create_image(500, 400, image=flies2, anchor=NW, tags="feed4")
     canvas.create_image(5,5, image=back_btn, anchor=NW, tags="back_btn")
 
     # Walls and stones
    
     obt1 = PhotoImage(file='obt1.png')
-    canvas.create_image(500, 500, image=obt1, anchor=NW, tags="wall")
+    canvas.create_image(500, 600, image=obt1, anchor=NW, tags="wall")
     canvas.create_image(310, 70, image=obt1, anchor=NW,  tags="wall")
 
     obt2 = PhotoImage(file="OBT2.png")
@@ -217,13 +217,16 @@ def level2(event):
     canvas.create_image(800, 50, image=flies, anchor=NW, tags="wall")
     canvas.create_image(1100, 530, image=flies, anchor=NW, tags="wall")
 
-    #BOOM ____________________________
-    BOOM = PhotoImage(file="obstacles3.png")
-    canvas.create_image(500, 265, image = BOOM, anchor = NW, tags = "kill")
+    #kil____________________________
+    BOOM = PhotoImage(file="obstacles5.png")
+    canvas.create_image(500, 265, image = BOOM, anchor = NW, tags = "enemy")
+    canvas.create_image(800, 667, image = BOOM, anchor = NW, tags = "enemy")
+    canvas.create_image(1250, 527, image = BOOM, anchor = NW, tags = "enemy")
+    canvas.create_image(900, 50, image = BOOM, anchor = NW, tags = "enemy")
     
 
     # Enemy
-    canvas.create_image(APP_WIDTH - 200, 200, image=bee2_left, anchor=NW, tags="enemy")
+    canvas.create_image(APP_WIDTH - 100, 100, image=bee2_left, anchor=NW, tags="enemy")
 
 # Player
     canvas.create_image(50, 50, image=frog2, anchor=NW, tags="player")
