@@ -94,6 +94,8 @@ bee2_left = PhotoImage(file='bee2_left.png')
 enemy_width = bee_right.width()
 enemy_height = bee_right.height()
 
+# Booms
+boom = PhotoImage(file="obstacles5.png")
 
 # Level button
 btn_1 = PhotoImage(file='Button1.png')
@@ -209,7 +211,9 @@ def level2(event):
     score = 0
     command = "level2"
     canvas.delete(ALL)
-    canvas.create_image(0,0, image=level2_bg, anchor=NW, tags="background1")
+    canvas.create_image(0, 0, image=level3_bg, anchor=NW, tags="level3_bg")
+    canvas.create_image(level3_bg.width(), 0, image=level3_bg, anchor=NW, tags="level3_bg2")
+    bg_run()
     canvas.create_text(150, 30, text="Score: " + str(score),font=('Arial 25 bold'), fill="black", tags="player_score")
     canvas.create_image(200, 200, image=flies2, anchor=NW, tags="feed1")
     canvas.create_image(400, 200, image=flies2, anchor=NW, tags="feed2")
@@ -223,6 +227,14 @@ def level2(event):
     canvas.create_image(50, 400, image=stone, anchor=NW, tags="wall")
     canvas.create_image(300, 200, image=stone, anchor=NW, tags="wall")
     canvas.create_image(500, 100, image=stone, anchor=NW, tags="wall")
+
+        #BOOM ____________________________
+    canvas.create_image(500, 265, image = boom, anchor = NW, tags = "kill")
+    #kil____________________________
+    canvas.create_image(500, 265, image = boom, anchor = NW, tags = "kill")
+    canvas.create_image(800, 667, image = boom, anchor = NW, tags = "kill")
+    canvas.create_image(1250, 527, image = boom, anchor = NW, tags = "kill")
+    canvas.create_image(900, 50, image = boom, anchor = NW, tags = "kill")
 
     # recall 
     canvas.create_image(APP_WIDTH - 250, 100, image=recall2, anchor=NW, tags="recall")
@@ -246,10 +258,8 @@ def level3(event):
     score = 0
     command = "level3"
     canvas.delete(ALL)
+    canvas.create_image(0,0, image=level2_bg, anchor=NW, tags="background1")
 #flower on water
-    canvas.create_image(0, 0, image=level3_bg, anchor=NW, tags="level3_bg")
-    canvas.create_image(level3_bg.width(), 0, image=level3_bg, anchor=NW, tags="level3_bg2")
-    bg_run()
     canvas.create_text(150, 30, text="Score: " + str(score),font=('Arial 25 bold'), fill="black", tags="player_score")
     canvas.create_image(500, 600, image=flower1, anchor=NW)
     canvas.create_image(800, 600, image=flower2, anchor=NW)
@@ -355,14 +365,18 @@ def check_overlaping(x_direction=0, y_direction=0, ground=False):
         if plf1 in overlap:
             change_score(plf1)
             return
+
     for plf2 in feed_pfs2:
         if plf2 in overlap:
             change_score(plf2)
             return
+
     if coord[0] + x_direction < 0 or coord[0] + x_direction > APP_WIDTH:
         return False
+
     if ground:
         overlap = canvas.find_overlapping(coord[0], coord[1], coord[0]+ stop.width(), coord[1] + stop.height())
+
     for platform in platforms:
         if platform in overlap:
             return False
@@ -521,13 +535,6 @@ game_start()
 
 window.bind("<Key>", start_move)
 window.bind("<KeyRelease>", stop_move)
-
-# Feeds move
-def feed_move():
-    canvas.move("feed1", 0, Y_VELOCITY)
-    canvas.move("feed2", 0, -Y_VELOCITY)
-    canvas.after(TIMED_LOOP, feed_move)
-feed_move()
 
 window.resizable(False, False)
 window.mainloop()
