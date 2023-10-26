@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 from tkinter import*
 =======
 <<<<<<< HEAD
@@ -64,97 +65,47 @@ jump = PhotoImage(file='frog_jump.png')
 jump2 = PhotoImage(file='frog_jump2.png')
 jum_left = PhotoImage(file='frog_jump_left.png')
 jum_left2 = PhotoImage(file='frog_jump_left2.png')
+=======
+from tkinter import *
 
-# Feeds
-flies = PhotoImage(file='flies.png')
-canvas.create_image(200, 50, image=flies, anchor=NW, tags="feed1")
-canvas.create_image(100, 150, image=flies, anchor=NW, tags="feed2")
-canvas.create_image(500, 250, image=flies, anchor=NW, tags="feed2")
-canvas.create_image(700, 50, image=flies, anchor=NW, tags="feed1")
-canvas.create_image(500, 500, image=flies, anchor=NW, tags="feed2")
-canvas.create_image(900, 300, image=flies, anchor=NW, tags="feed1")
-canvas.create_image(300, 300, image=flies, anchor=NW, tags="feed2")
+window = Tk()
+window.geometry("800x600")
+canvas = Canvas(window, width=800, height=600)
+canvas.pack()
 
-# Walls and Obstacles
-wall = PhotoImage(file='wall.png')
-wall2 = PhotoImage(file='wall2.png')
-obstacles = PhotoImage(file='obstacles.png')
-x, y = 0, APP_HEIGHT - wall.height()
-while x <= APP_WIDTH:
-    if x >= int(APP_WIDTH / 4) and x <= int(APP_WIDTH / 3):
-        canvas.create_image(x, y, image=obstacles, anchor=NW, tags= "enemy")
-        x += obstacles.width()
-    else:
-        canvas.create_image(x, y, image=wall, anchor=NW, tags="wall")
-        x += wall.width()
-x, y = 0, 100
-for i in range(5):
-    canvas.create_image(x+700, y, image=wall2, anchor=NW, tags="wall")
-    x += wall2.width()
-x, y = 0, 100
-canvas.create_image(x+300, y+100, image=obstacles, anchor=NW, tags="enemy")
+canvas.create_rectangle(100, 100, 150, 600, fill="red", tags="wall")
+canvas.create_rectangle(400, 100, 450, 600, fill="red", tags="wall")
 
-# Player
-player = canvas.create_image(200, 200, image=stop, anchor=NW)
+get_img = PhotoImage(file="frog2.png")
+canvas.create_image(200, 300, image=get_img, anchor=NW, tags="player")
 
-# Enemy
-bee_left = PhotoImage(file='bee_left.png')
-bee_right = PhotoImage(file='bee_right.png')
-enemy = canvas.create_image(APP_WIDTH - 300, 100, image=bee_left, anchor=NW, tags="enemy")
+def check_move(event):
+    if event.keysym == "Left":
+        Move_left(-10, 0)
+    elif event.keysym == "Right":
+        Move_right(10, 0)
+>>>>>>> feature-1
 
-
-# Check movement--------------------
-def check_movement(direction_x=0, direction_y=0, checkGround=False):
-    coord = canvas.coords(player)
-    platforms = canvas.find_withtag("wall")
-    if coord[0] + direction_x < 0 or coord[0] + direction_x > APP_WIDTH:
-        return False
-
-    if checkGround:
-        overlap = canvas.find_overlapping(coord[0], coord[1], coord[0]+ direction_x, coord[1] + direction_y)
-    else:
-        overlap = canvas.find_overlapping(coord[0], coord[1], coord[0]+stop.width(),coord[1] + stop.height())
-
-    for platform in platforms:
-        if platform in overlap:
+def check_overlap():
+    coord = canvas.coords("player")
+    plfs = canvas.find_withtag("wall")
+    overlap = canvas.find_overlapping(coord[0], coord[1], coord[0] + get_img.width(), coord[1]+get_img.height())
+    for plf in plfs:
+        if plf in overlap:
             return False
     return True
 
-def player_jum(force):
-    if force > 0:
-        if not check_movement(0, -force):
-            # if remember == "Left":
-            #     canvas.itemconfig(player, image=jum_left)
-            # elif remember == "Right":
-            #     canvas.itemconfig(player, image=jump)
-            canvas.move(player, 0, -force)
-            window.after(5, player_jum, force-1)
-    else:
-        canvas.itemconfig(player, image=jump2)
+def Move_left(x, y):
+    if check_overlap():
+        canvas.move("player", x, y)
 
-def move():
-    if KEY_PRESSED != []:
-        x = 0
-        if KEY_PRESSED[0] != "space":
-            remember = KEY_PRESSED[0]
-        if "Left" in KEY_PRESSED:
-            x -= SPEED
-            canvas.itemconfig(player, image=stop2)
-        elif "Right" in KEY_PRESSED:
-            x += SPEED
-            canvas.itemconfig(player, image=stop)
-        if "space" in KEY_PRESSED and not check_movement(0, GRAVITY_FORCE, True):
-            player_jum(30)
-        if check_movement(x):
-            canvas.move(player, x, 0)
-            window.after(10, move)
+def Move_right(x, y):
+    if check_overlap():
+        canvas.move("player", x, y)
 
-def start_move(event):
-    if event.keysym not in KEY_PRESSED:
-        KEY_PRESSED.append(event.keysym)
-        if len(KEY_PRESSED) == 1:
-            move()
+window.bind("<Key>", check_move)
 
+<<<<<<< HEAD
 def stop_move(event):
     global KEY_PRESSED
     if event.keysym in KEY_PRESSED:
@@ -226,3 +177,6 @@ window.resizable(False, False)
 >>>>>>> 1c62e4ea8c24fe6c742812e40871f5e9eafd5bf6
 >>>>>>> d368dc20a8f3feff36f645d76b851c5b7f247dc8
 window.mainloop()
+=======
+window.mainloop()
+>>>>>>> feature-1
