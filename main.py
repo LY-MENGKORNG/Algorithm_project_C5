@@ -1,5 +1,4 @@
 from tkinter import *
-import random
 import time
 from pygame import mixer
 
@@ -21,6 +20,8 @@ TIMED_LOOP = 15
 SPEED = 7
 RUNNING = False
 POSITION_CONFIG = [100, -100, 200, -200]
+# Player score
+score = 0
 
 # App center
 screen_width = window.winfo_screenwidth()
@@ -28,9 +29,6 @@ screen_height = window.winfo_screenheight() - 70
 x_axis = int((screen_width / 2) - (APP_WIDTH / 2))
 y_axis = int((screen_height / 2) - (APP_HEIGHT / 2))
 window.geometry(f'{APP_WIDTH}x{APP_HEIGHT}+{x_axis}+{y_axis}')
-
-#score_id
-SCORE=0
 
 # Frame
 frame = Frame(window, width=APP_WIDTH, height=APP_HEIGHT)
@@ -47,6 +45,7 @@ st_bg = PhotoImage(file='start_bg.png')
 level2_bg = PhotoImage(file='background3.png')
 level3_bg = PhotoImage(file='level3_bg.png')
 level3_bg2 = PhotoImage(file='level3_bg.png')
+history_bg = PhotoImage(file='history.png')
 
 # flower
 flower1 = PhotoImage(file='flower1.png')
@@ -54,9 +53,6 @@ flower2 = PhotoImage(file='flower2.png')
 
 # enemy house
 house = PhotoImage(file='bee_house.png')
-
-# Player score
-score = 0
 
 # Character
 stop = PhotoImage(file='frog_stop.png')
@@ -99,12 +95,12 @@ bee2_left = PhotoImage(file='bee2_left.png')
 enemy_width = bee_right.width()
 enemy_height = bee_right.height()
 
-# Booms
-
 # Level button
 btn_1 = PhotoImage(file='Button1.png')
 btn_2 = PhotoImage(file='Button2.png')
 btn_3 = PhotoImage(file='Button3.png')
+# History button
+his_btn = PhotoImage(file='about_btn.png')
 
 # Game start 
 button_img = PhotoImage(file='Button.png')
@@ -113,16 +109,30 @@ restart_btn = PhotoImage(file='restart_btn.png')
 back_btn = PhotoImage(file='back_btn.png')
 next_btn = PhotoImage(file='next_btn.png')
 again_btn = PhotoImage(file='again_btn.png')
+home_btn = PhotoImage(file='home_btn.png')
 
 # Player command
 command = "level1"
 
+# history
+def history(event):
+    canvas.delete(ALL)
+    canvas.create_image(0, 0, image=history_bg, anchor=NW)
+    canvas.create_image(5,5, image=back_btn, anchor=NW, tags="back_btn")
+    canvas.create_image(APP_WIDTH - home_btn.width()-10, 5, image=home_btn, anchor=NW, tags="start")
+    canvas.tag_bind("back_btn", "<Button-1>", level)
+    canvas.tag_bind("start", "<Button-1>", game_start)
+
 # Game start
-def game_start():
+def game_start(event):
+    canvas.delete(ALL)
     canvas.create_image(0,0, image=st_bg, anchor=NW, tags="bg_st")
     canvas.create_image(APP_WIDTH/2 - 120, APP_HEIGHT / 2-80, image=button_img, anchor=NW, tags="start_game")
+    canvas.create_image(APP_WIDTH/2 - 120, APP_HEIGHT / 2+50, image=his_btn, anchor=NW, tags="his")
     open_sound()
     canvas.tag_bind("start_game","<Button-1>", level)
+    canvas.tag_bind("his","<Button-1>", history)
+
 # LEVEL 1 ------------------------------------------------------------
 def level1(event):
     global command, score
@@ -131,7 +141,7 @@ def level1(event):
     canvas.delete(ALL)
     canvas.create_image(0,0, image=bg_img, anchor=NW, tags="first_bg")
     canvas.create_text(150, 30, text="Score: " + str(score),font=('Arial 25 bold'), fill="green", tags="player_score")
-    canvas.create_text(APP_WIDTH - 250, 30, text="Expected score: 10", font=('Arial 25 bold'), fill="red", tags="score")
+    canvas.create_text(APP_WIDTH - 250, 30, text="Expected score: 5", font=('Arial 25 bold'), fill="red", tags="score")
 # Enemy
     canvas.create_image(APP_WIDTH - 300, 100, image=bee_left, anchor=NW, tags="enemy")
 # Player
@@ -187,6 +197,8 @@ def level1(event):
     canvas.create_image(1200, 700, image=flies, anchor=NW, tags="feed2")
 # Back to level
     canvas.create_image(5,5, image=back_btn, anchor=NW, tags="back_btn")
+    canvas.create_image(APP_WIDTH - home_btn.width()-10, 5, image=home_btn, anchor=NW, tags="start")
+    canvas.tag_bind("start", "<Button-1>", game_start)
     canvas.tag_bind("back_btn", "<Button-1>", level)
 # Process game
     gravity(command)
@@ -201,7 +213,7 @@ def level2(event):
     canvas.delete(ALL)
     canvas.create_image(0, 0, image=level2_bg, anchor=NW, tags="level2_bg")
     canvas.create_text(150, 30, text="Score: " + str(score),font=('Arial 25 bold'), fill="white", tags="player_score")
-    canvas.create_text(APP_WIDTH - 250, 30, text="Expected score: 15", font=('Arial 25 bold'), fill="red", tags="score")
+    canvas.create_text(APP_WIDTH - 250, 30, text="Expected score: 10", font=('Arial 25 bold'), fill="red", tags="score")
     canvas.create_image(200, 200, image=flies2, anchor=NW, tags="feed2")
     canvas.create_image(400, 200, image=flies2, anchor=NW, tags="feed1")
     canvas.create_image(700, 100, image=flies2, anchor=NW, tags="feed2")
@@ -242,6 +254,8 @@ def level2(event):
     canvas.create_image(50, 50, image=stop, anchor=NW, tags="player")
 # back btn
     canvas.create_image(5,5, image=back_btn, anchor=NW, tags="back_btn")
+    canvas.create_image(APP_WIDTH - home_btn.width()-10, 5, image=home_btn, anchor=NW, tags="start")
+    canvas.tag_bind("start", "<Button-1>", game_start)
     canvas.tag_bind("back_btn", "<Button-1>", level)
 # Processes
     gravity(command)
@@ -279,7 +293,7 @@ def level3(event):
     canvas.create_image(0,0, image=level3_bg, anchor=NW, tags="level3_bg")
 #flower on water
     canvas.create_text(150, 30, text="Score: " + str(score),font=('Arial 25 bold'), fill="green", tags="player_score")
-    canvas.create_text(APP_WIDTH - 250, 30, text="Expected score: 15", font=('Arial 25 bold'), fill="red", tags="score")
+    canvas.create_text(APP_WIDTH - 250, 30, text="Expected score: 10", font=('Arial 25 bold'), fill="red", tags="score")
     canvas.create_image(500, 350, image=flower1, anchor=NW, tags="flower")
     canvas.create_image(800, 400, image=flower2, anchor=NW, tags="flower")
 #flies
@@ -322,6 +336,8 @@ def level3(event):
     canvas.create_image(APP_WIDTH - 200, 50, image=recall, anchor=NW, tags="recall")
 # back btn
     canvas.create_image(5,5, image=back_btn, anchor=NW, tags="back_btn")
+    canvas.create_image(APP_WIDTH - home_btn.width()-10, 5, image=home_btn, anchor=NW, tags="start")
+    canvas.tag_bind("start", "<Button-1>", game_start)
     canvas.tag_bind("back_btn", "<Button-1>", level)
 # Process
     gravity(command)
@@ -336,11 +352,13 @@ def level(event): # show all level
     canvas.create_image(APP_WIDTH / 4, APP_HEIGHT / 2 - 50, image=btn_1, anchor=CENTER, tags="level1")
     canvas.create_image(APP_WIDTH / 2, APP_HEIGHT / 2 - 50, image=btn_2, anchor=CENTER, tags="level2")
     canvas.create_image(APP_WIDTH - (APP_WIDTH / 4), APP_HEIGHT / 2 - 50, image=btn_3, anchor=CENTER, tags="level3")
+    canvas.create_image(APP_WIDTH - home_btn.width()-10, 5, image=home_btn, anchor=NW, tags="start")
+    canvas.tag_bind("start", "<Button-1>", game_start)
 
     canvas.tag_bind("level1", "<Button-1>", level1)
     canvas.tag_bind("level2", "<Button-1>", level2)
     canvas.tag_bind("level3", "<Button-1>", level3)
-
+# 
 def change_score(platform):
     global score
     score += 1
@@ -507,12 +525,12 @@ def checkgame_win(command):
     overlap = canvas.find_overlapping(coord[0], coord[1], coord[0], coord[1])
     if command == "level1":
         for plf in recall_plf:
-            if plf in overlap and score >= 10:
+            if plf in overlap and score >= 5:
                 canvas.after(1000, game_win, command)
                 return False
     elif command == "level2" or command == "level3":
         for plf in recall_plf:
-            if plf in overlap and score >= 15:
+            if plf in overlap and score >= 10:
                 canvas.after(1000, game_win, command)
                 return False
     return True
@@ -523,6 +541,7 @@ def start_move(event):
         KEY_PRESSED.append(event.keysym)
         if len(KEY_PRESSED) == 1:
             move_player(command)
+
 def stop_move(event):
     global KEY_PRESSED
     if event.keysym in KEY_PRESSED:
@@ -562,7 +581,7 @@ def enemy_move(X_VELOCITY, Y_VELOCITY, command):
         window.after(TIMED_LOOP, enemy_move, X_VELOCITY, Y_VELOCITY, command)
 
 # Game start
-game_start()
+game_start(Event)
 
 window.bind("<Key>", start_move)
 window.bind("<KeyRelease>", stop_move)
